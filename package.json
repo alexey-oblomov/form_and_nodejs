@@ -1,19 +1,46 @@
 {
   "name": "form_and_nodejs",
+  "homepage": "https://alexey-oblomov.github.io/form_and_nodejs/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.9.12",
+    "@material-ui/icons": "^4.9.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "antd": "^4.1.5",
+    "axios": "^0.19.2",
+    "body-parser": "^1.19.0",
+    "classnames": "^2.2.6",
+    "consolidate": "^0.15.1",
+    "cors": "^2.8.5",
+    "ejs": "^3.0.2",
+    "express": "^4.17.1",
+    "express-layout": "^0.1.0",
+    "formik": "^2.1.4",
+    "formik-material-ui": "^2.0.0-beta.1",
+    "gh-pages": "^2.2.0",
+    "jade": "^1.11.0",
+    "jquery": "^3.5.0",
+    "lodash": "^4.17.15",
+    "material-ui-number-input": "^5.0.24",
+    "mustache": "^4.0.1",
     "node-sass": "^4.13.1",
+    "prop-types": "^15.7.2",
+    "pug": "^2.0.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1"
+    "react-scripts": "3.4.1",
+    "styled-components": "^5.1.0",
+    "typeface-roboto": "0.0.75",
+    "yup": "^0.28.3"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "stylelint": "stylelint src/*.{css,scss,sass}",
     "stylelint:fix": "stylelint src/*.{css,scss,sass} --fix",
     "eslint": "eslint  src/*.{js,jsx}",
@@ -21,7 +48,8 @@
     "eslint:fix:layout": "eslint  src/*.{js,jsx} --fix --fix-type layout",
     "lint": "npm run eslint & npm run stylelint",
     "lint:fix": "npm run eslint:fix & npm run stylelint:fix",
-    "prettier": "prettier src/**/*.*"
+    "prettier": "prettier src/**/*.*",
+    "server": "node server/server.js"
   },
   "eslintConfig": {
     "extends": "react-app"

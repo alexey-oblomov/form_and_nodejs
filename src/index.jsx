@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import SignUpForm from './App';
+import 'typeface-roboto';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<SignUpForm />, document.getElementById('root'));
