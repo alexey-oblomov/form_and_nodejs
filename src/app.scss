@@ -12,7 +12,7 @@ body {
 
 .heading {
   margin: 0;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   font-size: 24px;
   font-weight: 400;
 }
@@ -21,12 +21,13 @@ body {
   background-color: white;
   border-radius: 10px;
   padding: 50px;
+  max-width: 1200px;
 }
 
-.form__wrapper {
-  display: flex;
-  justify-content: space-between;
-}
+// .form__wrapper {
+//   display: flex;
+//   justify-content: space-between;
+// }
 
 .form__block {
   margin-right: 10px;
@@ -45,14 +46,10 @@ body {
   justify-content: space-between;
 }
 
-.form__field--checkbox {
-  flex: 0 0 auto;
-}
-
 .field__error-message {
   color: red;
   width: 225px;
-  height: 50px;
+  height: 35px;
   font-size: 12px;
   font-weight: 400;
   padding: 3px 7px;
@@ -65,25 +62,12 @@ body {
   padding: 10px 0;
 }
 
-.container {
-  display: flex;
-  justify-content: space-between;
-}
-
-.leftSide {
-  display: flex;
-  flex-direction: column;
-}
-
-.rightSide {
-  display: flex;
-  flex-direction: column;
-}
-
 .form__listSkills {
   font-weight: 400;
   font-size: 14px;
   color: #323336;
+  padding-top: 15px;
+  padding-left: 20px;
 }
 
 .form__skills-input-block {
@@ -92,6 +76,50 @@ body {
 }
 
 .button-add-skill__container {
-  margin-left: 10px;
   padding-top: 5px;
+  max-width: 150px;
+}
+
+.form__up-block,
+.form__middle-block,
+.form__down-block {
+  display: flex;
+}
+
+.form__down-block {
+  justify-content: end;
+}
+
+.down-block__block-accept-terms-and-submit {
+  display: flex;
+  flex-direction: column;
+  align-content: space-between;
+}
+
+// .form__field--name, .form__field--skill {
+//   margin-right: 20px;
+//   align-self: start;
+// }
+
+.form__field--checkbox {
+  margin-bottom: 10px;
+  flex: 0 0 auto;
+}
+
+.form__field--password,
+.form__field--repeate-password {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 35px;
+}
+
+.field__error-message--password,
+.field__error-message--repeat-password {
+  padding: 0;
+  margin-left: 5px;
+  max-width: 180px;
+}
+
+.middle-block__left-side {
+  margin-right: 20px;
 }

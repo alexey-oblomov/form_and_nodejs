@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 import clsx from 'clsx';
 import {makeStyles} from '@material-ui/core/styles';
@@ -39,9 +38,11 @@ export default function CustomizedInputPassword(props) {
       size="small"
       className={clsx(classes.textField)}
       variant="outlined"
-      error={touched[name] && Boolean(errors[name])}
+      error={!!touched[name] && !!errors[name]}
     >
-      <InputLabel htmlFor="outlined-adornment-password">{label}</InputLabel>
+      <InputLabel htmlFor="outlined-adornment-password" required>
+        {label}
+      </InputLabel>
       <OutlinedInput
         id="outlined-adornment-password"
         size="small"

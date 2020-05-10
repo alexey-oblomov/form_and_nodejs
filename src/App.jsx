@@ -1,5 +1,5 @@
-import React from 'react';
-// import axios from "axios";
+import React, {useState} from 'react';
+import axios from 'axios';
 import * as Yup from 'yup';
 import {uniqueId} from 'lodash';
 import './app.scss';
@@ -8,15 +8,17 @@ import {Formik, Form, Field, FieldArray} from 'formik';
 
 import {Button} from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
 import {withStyles} from '@material-ui/core/styles';
 
 import CustomizedCheckbox from './components/checkkbox';
 import CustomizedInputPassword from './components/inputPassword';
+import RegistrationStatus from './components/registrationStatus';
 
 const SignUpSchema = Yup.object().shape({
   name: Yup.string()
-    .min(2, 'Слишком короткое имя. Не менее 2 знаков')
     .required('Обязательное поле')
+    .min(2, 'Слишком короткое имя. Не менее 2 знаков')
     .max(50, 'Слишком длинное поле. Не более 50 символов'),
   password: Yup.string()
     .min(8, 'Слишком короткий пароль. Не менее 8 символов')
@@ -32,9 +34,10 @@ const SignUpSchema = Yup.object().shape({
     .required('Обязательное поле'),
   email: Yup.string().email('Некорректный адрес').required('Обязательное поле'),
   website: Yup.string().url('Некорректный адрес'),
-  age: Yup.number()
-    .min(18, 'Маленький возраст. Должно быть больше 18')
-    .max(65, 'Слишком старый. Иди на пенсию')
+  age: Yup.string()
+    .min(1, 'от 18 до 65')
+    .max(2, 'от 18 до 65')
+    .matches(/^[1]{1}[8-9]{1}|^[2-5]{1}[0-9]{1}|^[6]{1}[0-5]{1}$/, 'от 18 до 65')
     .required('Обязательное поле'),
   acceptTerms: Yup.boolean().oneOf([true], 'Подтвердите согласие').required('Обязательное поле'),
 });
@@ -50,6 +53,8 @@ const StyledButton = withStyles({
 })(Button);
 
 export default function SignUpForm() {
+  const [isRegistration, setIsRegistration] = useState(0);
+
   const initialValues = {
     name: '',
     password: '',
@@ -62,18 +67,19 @@ export default function SignUpForm() {
     acceptTerms: false,
   };
 
-  const handleSubmit = values => {
-    JSON.stringify(values);
-    //   const data = JSON.stringify(values);
-    //   axios.post("http://localhost:3000/sign-up", data).then((response) => {
-    //     console.log(response);
-    //   });
-    //   console.log(data);
+  const handleSubmit = async values => {
+    const response = await axios.post('http://localhost:3000/sign-up', values);
+
+    if (response.data.status) {
+      setIsRegistration(1);
+    } else {
+      setIsRegistration(-1);
+    }
   };
 
   return (
     <div className="app">
-      <h1 className="heading">Регистрация</h1>
+      <RegistrationStatus isRegistration={isRegistration} />
       <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={SignUpSchema}>
         {({values, handleChange, setFieldValue, handleBlur, errors, touched, dirty, isValid}) => {
           const passwordProps = {
@@ -84,7 +90,7 @@ export default function SignUpForm() {
             onChange: handleChange('password'),
             onBlur: handleBlur('password'),
             label: 'Пароль',
-            labelWidth: 60,
+            labelWidth: 70,
           };
 
           const repeatPasswordProps = {
@@ -95,7 +101,7 @@ export default function SignUpForm() {
             onChange: handleChange('repeatPassword'),
             onBlur: handleBlur('repeatPassword'),
             label: 'Повторите пароль',
-            labelWidth: 140,
+            labelWidth: 150,
           };
 
           const checkboxProps = {
@@ -118,6 +124,7 @@ export default function SignUpForm() {
             value: values.name,
             onChange: handleChange('name'),
             onBlur: handleBlur('name'),
+            required: true,
           };
 
           const inputEmailProps = {
@@ -129,8 +136,9 @@ export default function SignUpForm() {
             label: 'Электронная почта',
             variant: 'outlined',
             onChange: handleChange('email'),
-            error: touched.email && Boolean(errors.email),
+            error: isRegistration === -1 || (touched.email && Boolean(errors.email)),
             onBlur: handleBlur('email'),
+            required: true,
           };
 
           const inputWebsiteProps = {
@@ -158,6 +166,7 @@ export default function SignUpForm() {
             value: values.age,
             error: touched.age && Boolean(errors.age),
             onBlur: handleBlur('age'),
+            required: true,
           };
 
           const inputSkill = {
@@ -176,128 +185,128 @@ export default function SignUpForm() {
 
           return (
             <Form>
-              <div className="container">
-                <div className="leftSide">
-                  <div className="form__wrapper">
-                    <div className="form__block">
-                      <div className="form__field">
-                        <div className="field__input">
-                          <Field {...inputNameProps} />
-                        </div>
-                        <div className="field__error-message">
-                          {touched.name ? errors.name : ''}
-                        </div>
-                      </div>
+              <Grid container spacing={3}>
+                <Grid item xs={12} sm={12}></Grid>
+                <Grid item xs={12} sm={3}>
+                  <div className="form__field form__field--name">
+                    <div className="field__input">
+                      <Field {...inputNameProps} />
+                    </div>
+                    <div className="field__error-message">{touched.name ? errors.name : ''}</div>
+                  </div>
+                </Grid>
+                <Grid item xs={12} sm={3}>
+                  <div className="form__field form__field--password">
+                    <div className="field__input">
+                      <CustomizedInputPassword {...passwordProps} />
+                    </div>
+                    <div className="field__error-message field__error-message--password">
+                      {touched.password ? errors.password : ''}
+                    </div>
+                  </div>
 
-                      <div className="form__field">
-                        <CustomizedInputPassword {...passwordProps} />
-                        <div className="field__error-message">
-                          {touched.password ? errors.password : ''}
-                        </div>
-                      </div>
-
-                      <div className="form__field">
+                  <div className="form__field">
+                    <div className="form__field form__field--repeate-password">
+                      <div className="field__input">
                         <CustomizedInputPassword {...repeatPasswordProps} />
                       </div>
-                      <div className="field__error-message">
+                      <div className="field__error-message field__error-message--repeat-password">
                         {touched.repeatPassword ? errors.repeatPassword : ''}
                       </div>
                     </div>
+                  </div>
+                </Grid>
+                <Grid item xs={12} sm={6}></Grid>
 
-                    <div className="form__block">
-                      <div className="form__field">
-                        <div className="field__input">
-                          <Field {...inputEmailProps} />
-                          <div className="field__error-message">
-                            {touched.email ? errors.email : ''}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="form__field">
-                        <div className="field__input">
-                          <Field {...inputWebsiteProps} />
-                          <div className="field__error-message">
-                            {touched.website ? errors.website : ''}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="form__field">
-                        <div className="field__input">
-                          <Field {...inputAgeProps} />
-                          <div className="field__error-message">
-                            {touched.age ? errors.age : ''}
-                          </div>
-                        </div>
-                      </div>
+                <Grid item xs={12} sm={3}>
+                  <div className="form__field form__field--name">
+                    <div className="field__input">
+                      <Field {...inputEmailProps} />
+                    </div>
+                    <div className="field__error-message">
+                      {touched.email ? errors.email : ''}
+                      {isRegistration === -1 ? 'Введите другой email' : ''}
                     </div>
                   </div>
+                </Grid>
 
-                  <div className="form__block">
+                <Grid item xs={12} sm={3}>
+                  <div className="form__field form__field--name">
+                    <div className="field__input">
+                      <Field {...inputAgeProps} />
+                    </div>
+                    <div className="field__error-message">{touched.age ? errors.age : ''}</div>
+                  </div>
+                  <div className="form__field form__field--name">
+                    <div className="field__input">
+                      <Field {...inputWebsiteProps} />
+                    </div>
+                    <div className="field__error-message">
+                      {touched.website ? errors.website : ''}
+                    </div>
+                  </div>
+                </Grid>
+
+                <FieldArray name="skills">
+                  {({push}) => (
+                    <>
+                      <Grid item xs={12} sm={3}>
+                        <div className="field__input">
+                          <Field {...inputSkill} />
+                        </div>
+                        <div>
+                          <ul className="form__listSkills">
+                            {values.skills.map(item => {
+                              return (
+                                <div key={uniqueId()}>
+                                  <li key={uniqueId()}>{item}</li>
+                                </div>
+                              );
+                            })}
+                          </ul>
+                        </div>
+                      </Grid>
+                      <Grid item xs={12} sm={3}>
+                        <StyledButton
+                          variant="contained"
+                          size="small"
+                          color="primary"
+                          type="button"
+                          onClick={() => {
+                            if (values.skill.trim()) {
+                              values.skills.push(values.skill);
+                              setFieldValue('skill', '');
+                            }
+                          }}
+                        >
+                          Добавить навык
+                        </StyledButton>
+                      </Grid>
+                    </>
+                  )}
+                </FieldArray>
+
+                <Grid item xs={12} sm={9}></Grid>
+                <Grid item xs={12} sm={3}>
+                  <div className="down-block__block-accept-terms-and-submit">
                     <div className="form__field form__field--checkbox">
                       <Field {...checkboxProps} />
                     </div>
-                  </div>
 
-                  <div className="form__block form__block--button-submit">
-                    <StyledButton
-                      variant="contained"
-                      size="small"
-                      color="primary"
-                      disabled={!dirty || !isValid}
-                      type="submit"
-                    >
-                      Отправить данные
-                    </StyledButton>
-                  </div>
-                </div>
-
-                <div className="rightSide">
-                  <div className="form__block">
-                    <div className="form__field">
-                      <FieldArray name="skills">
-                        {({push}) => (
-                          <>
-                            <div className="form__skills-input-block">
-                              <div>
-                                <Field {...inputSkill} />
-                              </div>
-                              <div className="button-add-skill__container">
-                                <StyledButton
-                                  variant="contained"
-                                  size="small"
-                                  color="primary"
-                                  type="button"
-                                  onClick={() => {
-                                    if (values.skill.trim()) {
-                                      push(values.skill);
-                                      setFieldValue('skill', '');
-                                    }
-                                  }}
-                                >
-                                  Добавить навык
-                                </StyledButton>
-                              </div>
-                            </div>
-                            <div>
-                              <ul className="form__listSkills">
-                                {values.skills.map(item => {
-                                  return (
-                                    <div key={uniqueId()} className="form__listSkills">
-                                      <li>{item}</li>
-                                    </div>
-                                  );
-                                })}
-                              </ul>
-                            </div>
-                          </>
-                        )}
-                      </FieldArray>
+                    <div className="form__field form__block--button-submit">
+                      <StyledButton
+                        variant="contained"
+                        size="small"
+                        color="primary"
+                        disabled={!dirty || !isValid}
+                        type="submit"
+                      >
+                        Отправить данные
+                      </StyledButton>
                     </div>
                   </div>
-                </div>
-              </div>
+                </Grid>
+              </Grid>
             </Form>
           );
         }}
