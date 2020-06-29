@@ -53,7 +53,6 @@ export default function CustomizedInputPassword(props) {
         onChange={onChange}
         onBlur={onBlur}
         endAdornment={
-          // eslint-disable-next-line react/jsx-wrap-multilines
           <InputAdornment position="end">
             <IconButton onClick={handleClickShowPassword} edge="end">
               {state.showPassword ? <Visibility /> : <VisibilityOff />}

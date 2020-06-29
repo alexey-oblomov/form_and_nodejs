@@ -1,11 +1,9 @@
-/* eslint-disable react/require-default-props */
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import img from './icons/Shape.png';
 
 export default function CustomizedCheckbox(props) {
-  // eslint-disable-next-line react/prop-types
   const {name, value, onChange, label} = props;
   const InputProps = {
     name,
