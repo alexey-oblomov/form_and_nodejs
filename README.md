@@ -1,8 +1,8 @@
 # Продвинутая работа с формами + основы работы node.js
 
-![screenshot](https://github.com/alexey-oblomov/form_and_nodejs/raw/dev/Screenshot1.png)
+![screenshot](/Screenshot1.png)
 
-![screenshot](https://github.com/alexey-oblomov/form_and_nodejs/raw/dev/Screenshot2.png)
+![screenshot](/Screenshot2.png)
 
 ## Описание функционала
 
